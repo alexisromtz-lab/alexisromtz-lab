@@ -1,6 +1,7 @@
 <!-- HUELLA-PERFIL-GITHUB-A2-20261019 -->
+<!-- HUELLA-PERFIL-FISICA-20261020 -->
 
-# Alexis Román — AI Infrastructure & CI Forensics
+# Alexis Román — Física computacional aplicada · metrología de IA
 
 ![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white)
 ![Bash](https://img.shields.io/badge/Bash-4EAA25?style=flat-square&logo=gnubash&logoColor=white)
@@ -14,6 +15,24 @@ claim below carries the object that produced it, and every gate I ship fails clo
 nothing to measure.
 
 **Full record:** [Open Source Diagnostics — a measured record](https://github.com/alexisromtz-lab/platino-labs/blob/main/HISTORIAL_DIAGNOSTICOS_OS_20261019.md)
+
+---
+
+## Origin — the same rule, applied to physical systems first
+
+Before evaluating models I measured systems where a false positive is not a bad metric, it is a
+published result. Four instruments are public, and all four publish their **negative results as
+results**:
+
+| Instrument | What it measures | The object that proves it |
+|---|---|---|
+| [`fotonica-monotile`](https://github.com/alexisromtz-lab/fotonica-monotile) | 2D TM Yee-FDTD scheme over the Hat monotile; noise floor declared as a bound (Q1..Q4 green) | contrast reported **NEGATIVE / SUSTAINED NULL** — 28 of 29 bins inside `3σ + riz`, failure run 1 vs 3 required · [DOI 10.5281/zenodo.23329943](https://doi.org/10.5281/zenodo.23329943) |
+| [`acustica-monotile`](https://github.com/alexisromtz-lab/acustica-monotile) | acoustic 2D solver; `bandgap` bounds over the aperiodic Hat monotile | `T(ν)` does **not** separate from its homogeneous null control in **22 of 29** bins · [DOI 10.5281/zenodo.23329941](https://doi.org/10.5281/zenodo.23329941) |
+| [`rf-signal-integrity`](https://github.com/alexisromtz-lab/rf-signal-integrity) | RF signal integrity — pre-registered **before** measuring | pre-registration + dated raw captures, kept as captured |
+| [`plasma-ade`](https://github.com/alexisromtz-lab/plasma-ade) | plasma / ADE; failure C4A frozen with custody of the raw | failure act + custody record, no retro-edits |
+
+The rule did not change when the object changed from a field to a benchmark: **a number that cannot
+differ is not evidence.**
 
 ---
 
