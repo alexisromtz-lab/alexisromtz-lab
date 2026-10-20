@@ -1,5 +1,6 @@
 <!-- HUELLA-PERFIL-GITHUB-A2-20261019 -->
 <!-- HUELLA-PERFIL-FISICA-20261020 -->
+<!-- HUELLA-PERFIL-FISICA-7-INSTRUMENTOS-20261020 -->
 
 # Alexis Román — Física computacional aplicada · metrología de IA
 
@@ -21,18 +22,23 @@ nothing to measure.
 ## Origin — the same rule, applied to physical systems first
 
 Before evaluating models I measured systems where a false positive is not a bad metric, it is a
-published result. Four instruments are public, and all four publish their **negative results as
-results**:
+published result. **Seven instruments are public**, and every one of them publishes its **negative
+results as results** — the criterion that fails is the one that stays sealed:
 
 | Instrument | What it measures | The object that proves it |
 |---|---|---|
 | [`fotonica-monotile`](https://github.com/alexisromtz-lab/fotonica-monotile) | 2D TM Yee-FDTD scheme over the Hat monotile; noise floor declared as a bound (Q1..Q4 green) | contrast reported **NEGATIVE / SUSTAINED NULL** — 28 of 29 bins inside `3σ + riz`, failure run 1 vs 3 required · [DOI 10.5281/zenodo.23329943](https://doi.org/10.5281/zenodo.23329943) |
 | [`acustica-monotile`](https://github.com/alexisromtz-lab/acustica-monotile) | acoustic 2D solver; `bandgap` bounds over the aperiodic Hat monotile | `T(ν)` does **not** separate from its homogeneous null control in **22 of 29** bins · [DOI 10.5281/zenodo.23329941](https://doi.org/10.5281/zenodo.23329941) |
-| [`rf-signal-integrity`](https://github.com/alexisromtz-lab/rf-signal-integrity) | RF signal integrity — pre-registered **before** measuring | pre-registration + dated raw captures, kept as captured |
-| [`plasma-ade`](https://github.com/alexisromtz-lab/plasma-ade) | plasma / ADE; failure C4A frozen with custody of the raw | failure act + custody record, no retro-edits |
+| [`rf-signal-integrity`](https://github.com/alexisromtz-lab/rf-signal-integrity) | RF S-parameters and `Z₀` against a criterion sealed at `1.0e-4` **before** the first number | four nominal meshes **FAIL** `C1.1` and the criterion was **not moved** — the *domain* was declared defective (`dx ≤ 8.25e-5 m`); sweep verdict `NO PASA / CONTROL NO DISCRIMINA` |
+| [`plasma-ade`](https://github.com/alexisromtz-lab/plasma-ade) | 1D ADE-FDTD cold plasma; wideband pulses | **9 criteria, 6 met, 3 failed and declared**; `C4a` frozen as a metrological result (`solver_plasma_cw_crudo_1649.txt`) · red seals **16 → 0** |
+| [`gw-rw-zerilli`](https://github.com/alexisromtz-lab/gw-rw-zerilli) | 2D kick-drift hyperbolics: convergence order and perimetric absorption | Richardson `p = 2.0028` (`O(h²)`, tolerance `0.05`) and `R_dB = −44.94 dB` under the sealed `−40 dB`; gate `F3` **declared ROJO** |
+| [`optica-kerr-2d`](https://github.com/alexisromtz-lab/optica-kerr-2d) | 2D TE Kerr propagation, object vs falsifier | object **ROJO** at `13.11 %` against a sealed `0.03`, and the `χ³ = 0` falsifier **passes on both sides** (beam diffracts `19.06 %` ⇒ the solver cannot confine by itself) |
+| [`sfqed-paper`](https://github.com/alexisromtz-lab/sfqed-paper) | strong-field QED paper **and its measuring apparatus** | 26-file verifiable bundle, one-command gate, 7-case *must-fail* bench that measures the verifier from outside — plus four **declared** unsealed items (`MOTORES.md` §6) |
 
 The rule did not change when the object changed from a field to a benchmark: **a number that cannot
-differ is not evidence.**
+differ is not evidence.** Nor did it change when the object turned out *negative*: a criterion that
+fails is published with its raw capture and its command, and the threshold is never moved to make it
+pass.
 
 ---
 
