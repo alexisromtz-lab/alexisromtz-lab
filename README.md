@@ -16,6 +16,18 @@ claim below carries the object that produced it, and every gate I ship fails clo
 nothing to measure.
 
 **Full record:** [Open Source Diagnostics — a measured record](https://github.com/alexisromtz-lab/platino-labs/blob/main/HISTORIAL_DIAGNOSTICOS_OS_20261019.md)
+<!-- HUELLA-PERFIL-START-HERE-6-20261020 -->
+
+## Start here — six repositories, in this order
+
+| # | Repository | What it is |
+|---|---|---|
+| 1 | [`platino-labs`](https://github.com/alexisromtz-lab/platino-labs) | forensic metrology for AI — structural-blindness audits over CI/CD and benchmarks, with falsifiers and DOI reports |
+| 2 | [`git-preflight-gate`](https://github.com/alexisromtz-lab/git-preflight-gate) | pre-flight gate: verifies the identity of the destination **before** writing, and fails closed when it cannot measure |
+| 3 | [`ast-channel-router`](https://github.com/alexisromtz-lab/ast-channel-router) | routes by extracted AST structure into declared channels |
+| 4 | [`rf-signal-integrity`](https://github.com/alexisromtz-lab/rf-signal-integrity) | S-parameters and `Z₀` against a criterion sealed at `1.0e-4` before the first number |
+| 5 | [`fotonica-monotile`](https://github.com/alexisromtz-lab/fotonica-monotile) | FDTD over the Hat monotile — contrast declared **NEGATIVE / SUSTAINED NULL** |
+| 6 | [`acustica-monotile`](https://github.com/alexisromtz-lab/acustica-monotile) | acoustic bandgaps over the same tiling — 22 of 29 bins inside its homogeneous null |
 
 ---
 
