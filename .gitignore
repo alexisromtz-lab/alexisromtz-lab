@@ -1,0 +1,6 @@
+# HUELLA-GITIGNORE-PERFIL-NV6-20261022
+# El banco de paridad vive en tests/ y genera bytecode y cache de pytest; sin
+# esto `git status` ensucia el arbol y un `git add -A` los commitearia.
+__pycache__/
+*.py[cod]
+.pytest_cache/
