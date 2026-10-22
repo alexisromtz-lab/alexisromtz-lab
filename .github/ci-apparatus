@@ -1,6 +1,9 @@
-# HUELLA-CI-PYTHON-V5-PROHIBICION-EVAL-20261020
-# Contrato v5: comando: + mide: (+ evidencia: si mide es manifiesto o banco).
-# La plantilla de este repo ya no firma verde con un comando que no mide.
-comando: python .github/verify_manifest.py
-mide: manifiesto
-evidencia: MANIFIESTO_SANO: [0-9]+
+# HUELLA-CI-APPARATUS-ALEXISROMTZ-LAB-NV6-20261022
+# Contrato v10: el aparato mide UNA cosa y la certifica con junitxml. Hasta este
+# acto corria `.github/verify_manifest.py`, que solo comprueba que los ficheros
+# existen, parsean y compilan: el README podia citar un repositorio inexistente
+# o inflar su inventario y el job seguia verde. El manifiesto se retira y su
+# testigo lo sustituye el banco de paridad, que es lo que aqui se mide.
+comando: python -m pytest -q tests --junitxml=/tmp/junit.xml
+mide: tests
+evidencia: junitxml

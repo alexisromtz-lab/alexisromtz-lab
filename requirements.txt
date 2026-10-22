@@ -1,0 +1,7 @@
+# HUELLA-REQUIREMENTS-PERFIL-NV6-20261022
+# pytest es dependencia del APARATO (collector + junitxml), no del runtime: este
+# repositorio no tiene runtime — su unico instrumento es el auditor del README.
+# Sin esta linea el runner no instala nada y el aparato muere con
+# ModuleNotFoundError; la leccion esta medida en acustica-monotile (run
+# 39547942974) y desde la v10 el runner instala solo lo declarado.
+pytest>=8,<10
