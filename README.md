@@ -15,14 +15,14 @@ evaluation harnesses. My working rule is that *a number that cannot differ is no
 claim below carries the object that produced it, and every gate I ship fails closed when it has
 nothing to measure.
 
-**Full record:** [Open Source Diagnostics — a measured record](https://github.com/alexisromtz-lab/platino-labs/blob/main/HISTORIAL_DIAGNOSTICOS_OS_20261019.md)
+**Full record:** [Open Source Diagnostics — a measured record](https://github.com/alexisromtz-lab/auditor-toolkit/blob/main/case_studies/tt-metal.md)
 <!-- HUELLA-PERFIL-START-HERE-6-20261020 -->
 
 ## Start here — six repositories, in this order
 
 | # | Repository | What it is |
 |---|---|---|
-| 1 | [`platino-labs`](https://github.com/alexisromtz-lab/platino-labs) | forensic metrology for AI — structural-blindness audits over CI/CD and benchmarks, with falsifiers and DOI reports |
+| 1 | [`auditor-toolkit`](https://github.com/alexisromtz-lab/auditor-toolkit) | the free pre-flight kit: catches the false green before it reaches the shard — case study and sample deliverable inside |
 | 2 | [`git-preflight-gate`](https://github.com/alexisromtz-lab/git-preflight-gate) | pre-flight gate: verifies the identity of the destination **before** writing, and fails closed when it cannot measure |
 | 3 | [`ast-channel-router`](https://github.com/alexisromtz-lab/ast-channel-router) | routes by extracted AST structure into declared channels |
 | 4 | [`rf-signal-integrity`](https://github.com/alexisromtz-lab/rf-signal-integrity) | S-parameters and `Z₀` against a criterion sealed at `1.0e-4` before the first number |
