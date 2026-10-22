@@ -24,7 +24,7 @@ lo que el README **declara** y lo que el README **contiene**:
 
 CENSO: de dónde sale y por qué está pineado. Medido el 2026-10-22 con
 `gh repo list alexisromtz-lab --limit 200 --json name,visibility` filtrando
-`visibility == "PUBLIC"` (19 repos). El mismo día `platino-labs` pasó a privado y se
+`visibility == "PUBLIC"` (19 repos). El mismo día el núcleo del laboratorio pasó a privado y se
 publicó `auditoria-ci`: el censo se vuelve a medir, no se ensancha a ojo. El CI de este aparato no consulta la API:
 el censo es un DATO FECHADO y se declara como tal. El invariante es de dirección
 única, `citado ⊆ censo`: un repositorio público NUEVO no rompe el perfil; un
