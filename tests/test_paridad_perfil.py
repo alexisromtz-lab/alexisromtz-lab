@@ -52,7 +52,8 @@ from pathlib import Path
 RAIZ = Path(__file__).resolve().parents[1]
 README = RAIZ / "README.md"
 
-CENSO_MEDIDO = "2026-10-22"
+# HUELLA-CENSO-REMEDIDO-22-20261030
+CENSO_MEDIDO = "2026-10-30"
 CENSO_COMANDO = (
     "gh repo list alexisromtz-lab --limit 200 --json name,visibility "
     "--jq '[.[] | select(.visibility==\"PUBLIC\") | .name]'"
@@ -68,9 +69,12 @@ CENSO_PUBLICO = frozenset(
         "fotonica-monotile",
         "git-preflight-gate",
         "gw-rw-zerilli",
+        "la-auditora",
         "optica-kerr-2d",
         "plasma-ade",
+        "platino-ai-gate",
         "platino-corpus",
+        "platino-data-room",
         "protocol-core",
         "protocol-core-dist",
         "qnm",

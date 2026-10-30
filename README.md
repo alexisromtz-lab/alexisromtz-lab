@@ -16,9 +16,9 @@ claim below carries the object that produced it, and every gate I ship fails clo
 nothing to measure.
 
 **Full record:** [Open Source Diagnostics — a measured record](https://github.com/alexisromtz-lab/auditor-toolkit/blob/main/case_studies/tt-metal.md)
-<!-- HUELLA-PERFIL-START-HERE-6-20261020 -->
+<!-- HUELLA-PERFIL-START-HERE-8-20261030 -->
 
-## Start here — six repositories, in this order
+## Start here — eight repositories, in this order
 
 | # | Repository | What it is |
 |---|---|---|
@@ -28,6 +28,22 @@ nothing to measure.
 | 4 | [`rf-signal-integrity`](https://github.com/alexisromtz-lab/rf-signal-integrity) | S-parameters and `Z₀` against a criterion sealed at `1.0e-4` before the first number |
 | 5 | [`fotonica-monotile`](https://github.com/alexisromtz-lab/fotonica-monotile) | FDTD over the Hat monotile — contrast declared **NEGATIVE / SUSTAINED NULL** |
 | 6 | [`acustica-monotile`](https://github.com/alexisromtz-lab/acustica-monotile) | acoustic bandgaps over the same tiling — 22 of 29 bins inside its homogeneous null |
+| 7 | [`la-auditora`](https://github.com/alexisromtz-lab/la-auditora) | the audit service itself: supply-chain and CI failure diagnosis, published as a live page |
+| 8 | [`platino-data-room`](https://github.com/alexisromtz-lab/platino-data-room) | the evidence room: every audit graph pinned to a commit, released as an index |
+
+<!-- HUELLA-PERFIL-OFERTA-2-20261030 -->
+
+## The offer — two links, both live today
+
+Rows 7 and 8 above are not method, they are the product. If you want the audit rather than the
+essays: the service page is the door, and the evidence room is what the audit hands you —
+**36 assets, 22 public graphs and 13 ingestion runs, every one pinned to a commit**, so a claim
+can be re-run instead of believed.
+
+| What it is | Where |
+|---|---|
+| **The audit** — CI and supply-chain failure diagnosis, priced per finding | [`la-auditora`](https://github.com/alexisromtz-lab/la-auditora) · [live page](https://alexisromtz-lab.github.io/la-auditora/) |
+| **The evidence** — the pinned index behind it | [`platino-data-room` · `arch-index-20261029-batch2`](https://github.com/alexisromtz-lab/platino-data-room/releases/tag/arch-index-20261029-batch2) |
 
 ---
 
