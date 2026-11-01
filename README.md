@@ -22,6 +22,12 @@ evaluation harnesses. My working rule is that *a number that cannot differ is no
 claim below carries the object that produced it, and every gate I ship fails closed when it has
 nothing to measure.
 
+**No adivinamos: medimos** — *we do not guess, we measure.* Platino Labs is an applied
+computational-physics laboratory that sells software: the discipline that decides whether a numerical
+scheme converges is the same one that decides what a product page is allowed to claim. The public
+instruments further down are the pedigree — and every one of them publishes its **negative** results
+as results.
+
 **Full record:** [Open Source Diagnostics — a measured record](https://github.com/alexisromtz-lab/auditor-toolkit/blob/main/case_studies/tt-metal.md)
 <!-- HUELLA-PERFIL-PRODUCTOS-3-20261031 -->
 
@@ -30,11 +36,11 @@ nothing to measure.
 The instruments further down are the hook. This is the product line they come out of: **Studio City**, a
 booking platform for boutique studios, and two verticals that run on the same booking core.
 
-| Product | What it is | Live route |
-|---|---|---|
-| **Studio City** | booking platform for boutique studios — hourly reservations, owner dashboard, per-hour schedule | [studiocity.app](https://studiocity.app/) |
-| **Barber Labs** | the barbershop vertical: appointment system built on the Studio City booking core | [studiocity.app/barber-labs](https://studiocity.app/barber-labs) |
-| **Padel Labs** | the court-slot vertical: scheduled play built on the same core | [studiocity.app/padel](https://studiocity.app/padel) |
+| Product | What it is | Live route | What the site charges |
+|---|---|---|---|
+| **Studio City** | booking platform for boutique studios — hourly reservations, owner dashboard, per-hour schedule | [studiocity.app](https://studiocity.app/) | `Básico $299/mes` · `Pro $599/mes` · `Premium $899/mes` |
+| **Barber Labs** | the barbershop vertical: appointment system built on the Studio City booking core | [studiocity.app/barber-labs](https://studiocity.app/barber-labs) | the same plan ladder — one booking core, one price list |
+| **Padel Labs** | the court-slot vertical: scheduled play built on the same core | [studiocity.app/padel](https://studiocity.app/padel) | the same plan ladder — one booking core, one price list |
 
 Each route is checked against a negative control on the same host: an unregistered slug renders the
 generic template, a real product renders its own title. Measured 2026-10-31 —
@@ -46,6 +52,26 @@ The same rule that governs the instruments governs the products: what is written
 can be pointed at. Commercial figures for the line — studios registered, studios on a paid plan,
 currency collected — are **not** published here, because this page does not measure them. They live
 in the evidence room with their command, or they are not claimed.
+
+<!-- HUELLA-PERFIL-PRECIO-MEDIDO-20261101 -->
+
+**The entry price, measured — not quoted.** On 2026-11-01 the public pricing surface publishes three
+plans and one headline, and nothing else:
+
+```bash
+curl -s https://studiocity.app/ | grep -o '\$[0-9]\{3\}/mes'                 # → $299/mes
+curl -s https://studiocity.app/ | grep -o -E 'Básico|Pro|Premium'            # → the three tier names
+```
+
+`Básico $299/mes` · `Pro $599/mes` · `Premium $899/mes`, headlined *«Prueba gratis · Planes desde
+$299/mes · Sin permanencia · Sin comisiones»*. The entry price is therefore **$299/mes**, and that is
+the only one this page publishes.
+
+A launch condition of `$99/mes` for the first three months circulates internally and is **not
+published on the site** — so it is not published here either. Two public sources quoting different
+numbers for the same product is precisely the defect this page is built to refuse: a prospect who
+reads `$99` here and `$299` there does not doubt the price, they doubt the laboratory. If that
+condition ever ships on the site, it ships here in the same commit, and never before.
 
 <!-- HUELLA-PERFIL-TRES-PUERTAS-20261031 -->
 

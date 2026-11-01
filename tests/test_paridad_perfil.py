@@ -87,6 +87,7 @@ CENSO_PUBLICO = frozenset(
 
 SECCION_INICIO = "## Start here"
 SECCION_ORIGEN = "## Origin"
+SECCION_PRODUCTOS = "## What we ship"
 MIN_LINEAS = 50
 MIN_HUELLAS = 3
 
@@ -236,6 +237,78 @@ def violaciones(clase: str, t: str) -> list[str]:
     return [x for x in auditar(t) if x.startswith(clase)]
 
 
+# ------------------------------------------------------------- bloque de precio
+# El precio es el único campo comercial que este README publica, y por eso es el
+# único que puede contradecir a la página viva. Medido el 2026-11-01 con
+#   curl -s https://studiocity.app/ | grep -o '\$[0-9]\{3\}/mes'
+#   → $299/mes en el encabezado · Básico $299 · Pro $599 · Premium $899
+# El `$99/mes` de los tres primeros meses es una CONDICIÓN DE LANZAMIENTO que el
+# sitio NO publica. Por eso sólo puede aparecer dentro de este bloque y junto a
+# su cláusula: fuera de él, un `$99` es una oferta que la página no respalda, y
+# dos fuentes públicas con cifras distintas es el defecto que este perfil existe
+# para no cometer.
+# <!-- HUELLA-PERFIL-PRECIO-CLAUSULA-NORMALIZADA-20261101 -->
+# Adenda: la primera versión buscaba los literales sobre el texto crudo y se puso
+# roja sobre su propio objeto sano — el README envuelve párrafos a ~100 columnas y
+# `not published on the site` quedaba partido en dos líneas. Un instrumento que
+# enrojece sobre el sujeto correcto no mide el sujeto: mide su propio ancho de
+# línea. Los literales se buscan ahora sobre el bloque con el espaciado colapsado,
+# y el sujeto del precio (`FUENTE_PRECIO`) deja de ser cualquier `curl` para ser
+# la URL concreta que se midió.
+HUELLA_PRECIO = "HUELLA-PERFIL-PRECIO-MEDIDO-20261101"
+PRECIO_ENTRADA = "$299/mes"
+FECHA_PRECIO = "2026-11-01"
+CLAUSULA_PRECIO = "not published on the site"
+FUENTE_PRECIO = "https://studiocity.app/"
+RE_CLAUSULA = re.compile(r"not\s+published\s+on\s+the\s+site")
+RE_NOVENTA_NUEVE = re.compile(r"\$ ?99(?!\d)")
+
+
+def bloque_precio(t: str) -> str:
+    """Desde la huella del precio hasta el siguiente encabezado de nivel 2."""
+    i = t.find(HUELLA_PRECIO)
+    if i < 0:
+        return ""
+    resto = t[i:]
+    m = re.search(r"^## ", resto, re.M)
+    return resto if m is None else resto[: m.start()]
+
+
+def _compacto(s: str) -> str:
+    """Colapsa el espaciado: un párrafo envuelto no cambia lo que el bloque declara."""
+    return " ".join(s.split())
+
+
+def auditar_precio(t: str) -> list[str]:
+    """Contrato del único campo comercial: cifra, fecha, comando, sujeto y cláusula."""
+    i = t.find(HUELLA_PRECIO)
+    if i < 0:
+        return [f"PRECIO_SIN_HUELLA: falta {HUELLA_PRECIO}"]
+    bloque = bloque_precio(t)
+    fin = i + len(bloque)
+    visto = _compacto(bloque)
+    v: list[str] = []
+    if PRECIO_ENTRADA not in visto:
+        v.append(f"PRECIO_NO_CASA: el bloque no publica {PRECIO_ENTRADA!r}")
+    if FECHA_PRECIO not in visto:
+        v.append("PRECIO_SIN_FECHA: el bloque no fecha su medición")
+    if "curl" not in visto:
+        v.append("PRECIO_SIN_COMANDO: el bloque no publica el comando que lo mide")
+    if FUENTE_PRECIO not in visto:
+        v.append(f"PRECIO_SIN_SUJETO: el bloque no nombra la fuente medida {FUENTE_PRECIO!r}")
+    if CLAUSULA_PRECIO not in visto:
+        v.append(f"PRECIO_SIN_CLAUSULA: el bloque no declara {CLAUSULA_PRECIO!r}")
+    for m in RE_NOVENTA_NUEVE.finditer(t):
+        if not i <= m.start() < fin:
+            v.append(f"PRECIO_SIN_CLAUSULA: `$99` fuera del bloque medido (offset {m.start()})")
+    return v
+
+
+def violaciones_precio(clase: str, t: str) -> list[str]:
+    return [x for x in auditar_precio(t) if x.startswith(clase)]
+
+
+
 # -------------------------------------------------------------------- mutación
 def _anexar_fila(t: str, prefijo: str, fila: str) -> str:
     bloque = seccion(t, prefijo)
@@ -353,3 +426,76 @@ def test_el_auditor_lee_el_archivo_que_se_le_da(tmp_path):
     copia.write_text(_anexar_fila(texto(), SECCION_INICIO, fantasma), encoding="utf-8")
     assert auditar(texto()) == []
     assert violaciones("REPO_HUERFANO", texto(copia)), "el auditor ignoró la ruta recibida"
+
+
+# ------------------------------------------------------- invariantes del precio
+def test_el_precio_publicado_lleva_su_medicion():
+    t = texto()
+    assert auditar_precio(t) == [], auditar_precio(t)
+
+
+def test_el_precio_de_entrada_es_el_que_publica_el_sitio():
+    """La cifra que este README vende no puede diferir de la que cobra la página."""
+    bloque = bloque_precio(texto())
+    assert PRECIO_ENTRADA in bloque, f"el bloque no publica {PRECIO_ENTRADA!r}"
+    assert "Básico" in bloque and "Premium" in bloque, "el bloque no publica la escalera de planes"
+
+
+def test_falsador_precio_99_vendido_fuera_del_bloque():
+    """El control que el CEO pidió: publicar `$99` como precio tiene que doler."""
+    mutado = _sustituir_en(
+        texto(), SECCION_PRODUCTOS, "| **Studio City**", "| `$99/mes` · **Studio City**"
+    )
+    assert not violaciones_precio("PRECIO_NO_CASA", mutado), "el control no aísla la cláusula"
+    assert violaciones_precio("PRECIO_SIN_CLAUSULA", mutado), "el auditor aceptó un `$99` de oferta"
+
+
+def test_falsador_precio_sin_comando():
+    t = texto()
+    bloque = bloque_precio(t)
+    mutado = t.replace(bloque, bloque.replace("curl", "la página"), 1)
+    assert "PRECIO_SIN_COMANDO" in " ".join(auditar_precio(mutado)), (
+        "el auditor aceptó un precio sin el comando que lo mide"
+    )
+
+
+def test_falsador_precio_de_entrada_movido():
+    """Subir o bajar la cifra sin volver a medir el sitio es rojo."""
+    t = texto()
+    bloque = bloque_precio(t)
+    mutado = t.replace(bloque, bloque.replace(PRECIO_ENTRADA, "$199/mes"), 1)
+    assert "PRECIO_NO_CASA" in " ".join(auditar_precio(mutado)), (
+        "el auditor aceptó una cifra de entrada que el bloque ya no publica"
+    )
+
+
+def test_la_clausula_sobrevive_al_salto_de_linea():
+    """Regresión: el sujeto sano no puede enrojecer por el ancho del párrafo."""
+    t = texto()
+    bloque = bloque_precio(t)
+    partido = RE_CLAUSULA.sub("not published\non the site", bloque, count=1)
+    assert partido != bloque, "el bloque dejó de declarar la cláusula que esta prueba parte"
+    assert auditar_precio(t.replace(bloque, partido, 1)) == [], (
+        "el auditor mide el ancho de línea del README, no el precio que publica"
+    )
+
+
+def test_falsador_precio_clausula_ausente():
+    """El colapso de espaciado no puede volver tautológica la cláusula."""
+    t = texto()
+    bloque = bloque_precio(t)
+    mutado = t.replace(bloque, RE_CLAUSULA.sub("reseñada aquí", bloque, count=1), 1)
+    assert mutado != t, "el bloque dejó de declarar la cláusula que este falsador retira"
+    assert [x.split(":")[0] for x in auditar_precio(mutado)] == ["PRECIO_SIN_CLAUSULA"], (
+        "el auditor aceptó una condición de lanzamiento sin declarar que no está publicada"
+    )
+
+
+def test_falsador_precio_sin_sujeto():
+    """Un `curl` cualquiera no es una medición: el bloque tiene que nombrar la fuente."""
+    t = texto()
+    bloque = bloque_precio(t)
+    mutado = t.replace(bloque, bloque.replace(FUENTE_PRECIO, "la página de precios"), 1)
+    assert [x.split(":")[0] for x in auditar_precio(mutado)] == ["PRECIO_SIN_SUJETO"], (
+        "el auditor aceptó un precio sin la fuente que lo mide"
+    )
