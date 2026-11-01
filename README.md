@@ -2,13 +2,20 @@
 <!-- HUELLA-PERFIL-FISICA-20261020 -->
 <!-- HUELLA-PERFIL-FISICA-7-INSTRUMENTOS-20261020 -->
 
-# Alexis Román — Física computacional aplicada · metrología de IA
+# Platino Labs — Software Engineering & AI Factory
+
+**Alexis Román, founder.** We build products, audit the systems they run on, and secure the writes and
+the commits along the way. The factory's product is measurement: applied computational physics and AI
+metrology, shipped as instruments anyone can re-run — and as products people pay for.
 
 ![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white)
 ![Bash](https://img.shields.io/badge/Bash-4EAA25?style=flat-square&logo=gnubash&logoColor=white)
 ![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=flat-square&logo=githubactions&logoColor=white)
 ![pytest](https://img.shields.io/badge/pytest-0A9EDC?style=flat-square&logo=pytest&logoColor=white)
 ![Zenodo](https://img.shields.io/badge/Zenodo_—_3_DOIs-1682D4?style=flat-square&logo=zenodo&logoColor=white)
+[![Studio City](https://img.shields.io/badge/Studio_City-live-111111?style=flat-square)](https://studiocity.app/)
+[![Barber Labs](https://img.shields.io/badge/Barber_Labs-live-111111?style=flat-square)](https://studiocity.app/barber-labs)
+[![Padel Labs](https://img.shields.io/badge/Padel_Labs-live-111111?style=flat-square)](https://studiocity.app/padel)
 
 I work on **failure diagnosis at the systems level**: CI pipelines, LLM inference serving, and
 evaluation harnesses. My working rule is that *a number that cannot differ is not evidence* — every
@@ -16,9 +23,57 @@ claim below carries the object that produced it, and every gate I ship fails clo
 nothing to measure.
 
 **Full record:** [Open Source Diagnostics — a measured record](https://github.com/alexisromtz-lab/auditor-toolkit/blob/main/case_studies/tt-metal.md)
+<!-- HUELLA-PERFIL-PRODUCTOS-3-20261031 -->
+
+## What we ship — three live products
+
+The instruments further down are the hook. This is the product line they come out of: **Studio City**, a
+booking platform for boutique studios, and two verticals that run on the same booking core.
+
+| Product | What it is | Live route |
+|---|---|---|
+| **Studio City** | booking platform for boutique studios — hourly reservations, owner dashboard, per-hour schedule | [studiocity.app](https://studiocity.app/) |
+| **Barber Labs** | the barbershop vertical: appointment system built on the Studio City booking core | [studiocity.app/barber-labs](https://studiocity.app/barber-labs) |
+| **Padel Labs** | the court-slot vertical: scheduled play built on the same core | [studiocity.app/padel](https://studiocity.app/padel) |
+
+Each route is checked against a negative control on the same host: an unregistered slug renders the
+generic template, a real product renders its own title. Measured 2026-10-31 —
+`/` → *Studio City — La plataforma integral para estudios boutique* · `/barber-labs` →
+*Barber Labs — Sistema de citas para barberías | Studio City* · `/padel` → *Padel Labs · Studio City* ·
+control `/zzz-control-negativo-xyz` → *Estudio · Studio City*.
+
+The same rule that governs the instruments governs the products: what is written is what a command
+can be pointed at. Commercial figures for the line — studios registered, studios on a paid plan,
+currency collected — are **not** published here, because this page does not measure them. They live
+in the evidence room with their command, or they are not claimed.
+
+<!-- HUELLA-PERFIL-TRES-PUERTAS-20261031 -->
+
+## Three doors — build, audit, secure
+
+One factory, three doors. The same apparatus sits behind all three, so the doors are not marketing
+labels: each one names a different object being measured, and each one can be checked from outside
+before anyone talks to me.
+
+| Door | What you get | What you can check before the first call |
+|---|---|---|
+| **Build — SaaS** | a booking platform and the verticals that run on it: hourly agenda, owner dashboard, price per slot | three live routes whose titles survive a negative control — see **What we ship** above |
+| **Audit — diagnosis** | CI and supply-chain failure diagnosis, priced per finding, delivered as a report whose every graph is pinned to a commit | [live service page](https://alexisromtz-lab.github.io/la-auditora/) · [evidence room, 36 assets pinned to a commit](https://github.com/alexisromtz-lab/platino-data-room/releases/tag/arch-index-20261029-batch2) |
+| **Secure — the writes** | a pre-flight gate that proves the identity of the destination *before* writing, and commits that must declare which model wrote them | [`git-preflight-gate`](https://github.com/alexisromtz-lab/git-preflight-gate) fails closed when it cannot measure · [`platino-ai-gate`](https://github.com/alexisromtz-lab/platino-ai-gate) rejects `Model: none` on real code |
+
+**What is not in that table, and why.** The cloud-spend audit and the credential-history scan run
+inside the private corpus: there is no public repository for them and no client case published yet, so
+they are listed here as **capability, not proof** — declared, and `NO_MEDIDO` from where you are
+standing. A page that shows three doors and hides which two have no published case is a brochure; this
+one carries the boundary in the same paragraph as the offer.
+
 <!-- HUELLA-PERFIL-START-HERE-8-20261030 -->
 
-## Start here — eight repositories, in this order
+## Start here — nine repositories, in this order
+
+**The arsenal.** Everything in this table is public, downloadable, and runs without talking to me —
+that is the whole point. These are the instruments the audit door above is built from, and they are
+already pointed at my own repository, in public, with their red days intact.
 
 | # | Repository | What it is |
 |---|---|---|
@@ -30,6 +85,7 @@ nothing to measure.
 | 6 | [`acustica-monotile`](https://github.com/alexisromtz-lab/acustica-monotile) | acoustic bandgaps over the same tiling — 22 of 29 bins inside its homogeneous null |
 | 7 | [`la-auditora`](https://github.com/alexisromtz-lab/la-auditora) | the audit service itself: supply-chain and CI failure diagnosis, published as a live page |
 | 8 | [`platino-data-room`](https://github.com/alexisromtz-lab/platino-data-room) | the evidence room: every audit graph pinned to a commit, released as an index |
+| 9 | [`platino-ai-gate`](https://github.com/alexisromtz-lab/platino-ai-gate) | two git hooks that make every commit declare which model wrote it — and reject `Model: none` on real code |
 
 <!-- HUELLA-PERFIL-OFERTA-2-20261030 -->
 
