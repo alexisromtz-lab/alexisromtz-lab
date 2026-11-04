@@ -211,7 +211,7 @@ variable that was silently double-defined and the one-line fix for the error tax
 ### 4. `uv pip check` is green and the import still fails
 
 A package set can be **coherent** and still be **incomplete**. Measured in a public CI pipeline: the
-install shares 117 packages, `uv pip check` reports `All installed packages are compatible`, and
+environment holds 117 packages, `uv pip check` reports `All installed packages are compatible`, and
 **12.06 s later the same interpreter** raises `ModuleNotFoundError: No module named 'prisma'`. Nothing was
 installed in between.
 
