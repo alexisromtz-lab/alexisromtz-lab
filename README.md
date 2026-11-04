@@ -220,9 +220,10 @@ Coherence is a relation between **declarations**; completeness is a relation bet
 through six import hops is declared in a *different* extra than the one being installed, so every
 declared set is satisfied while the import is doomed.
 
-Written up, deposited, and discussed upstream:
+Written up, deposited, discussed upstream, and now with a public corpus behind it:
 [**Coherence is not completeness**](https://doi.org/10.5281/zenodo.23955654) · [10.5281/zenodo.23955654](https://doi.org/10.5281/zenodo.23955654)
 · thread: [`astral-sh/uv#13963`](https://github.com/astral-sh/uv/issues/13963)
+· rules: [`corpus-medido`](https://github.com/alexisromtz-lab/corpus-medido) — 56 measurement rules, Apache-2.0 / CC BY 4.0
 
 ---
 
