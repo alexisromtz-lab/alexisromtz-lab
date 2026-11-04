@@ -12,7 +12,7 @@ metrology, shipped as instruments anyone can re-run — and as products people p
 ![Bash](https://img.shields.io/badge/Bash-4EAA25?style=flat-square&logo=gnubash&logoColor=white)
 ![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=flat-square&logo=githubactions&logoColor=white)
 ![pytest](https://img.shields.io/badge/pytest-0A9EDC?style=flat-square&logo=pytest&logoColor=white)
-![Zenodo](https://img.shields.io/badge/Zenodo_—_3_DOIs-1682D4?style=flat-square&logo=zenodo&logoColor=white)
+![Zenodo](https://img.shields.io/badge/Zenodo_—_6_DOIs-1682D4?style=flat-square&logo=zenodo&logoColor=white)
 [![Studio City](https://img.shields.io/badge/Studio_City-live-111111?style=flat-square)](https://studiocity.app/)
 [![Barber Labs](https://img.shields.io/badge/Barber_Labs-live-111111?style=flat-square)](https://studiocity.app/barber-labs)
 [![Padel Labs](https://img.shields.io/badge/Padel_Labs-live-111111?style=flat-square)](https://studiocity.app/padel)
@@ -207,6 +207,22 @@ being handed a reusable diagnosis.
 
 Plus a full root-cause write-up on issue **#9072** (CI failure, "duplex open timed out"), with the
 variable that was silently double-defined and the one-line fix for the error taxonomy.
+
+### 4. `uv pip check` is green and the import still fails
+
+A package set can be **coherent** and still be **incomplete**. Measured in a public CI pipeline: the
+install shares 117 packages, `uv pip check` reports `All installed packages are compatible`, and
+**12.06 s later the same interpreter** raises `ModuleNotFoundError: No module named 'prisma'`. Nothing was
+installed in between.
+
+Coherence is a relation between **declarations**; completeness is a relation between declarations and
+**code** — and no metadata-based check can see the second one. Here the package that the code reaches
+through six import hops is declared in a *different* extra than the one being installed, so every
+declared set is satisfied while the import is doomed.
+
+Written up, deposited, and discussed upstream:
+[**Coherence is not completeness**](https://doi.org/10.5281/zenodo.23955654) · [10.5281/zenodo.23955654](https://doi.org/10.5281/zenodo.23955654)
+· thread: [`astral-sh/uv#13963`](https://github.com/astral-sh/uv/issues/13963)
 
 ---
 
