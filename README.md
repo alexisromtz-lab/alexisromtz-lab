@@ -19,7 +19,8 @@ metrology, shipped as instruments anyone can re-run — and as products people p
 <!-- HUELLA-PERFIL-BADGES-CODIGO-20261106 -->
 [![git-preflight-gate](https://img.shields.io/badge/git--preflight--gate-fail--closed-111111?style=flat-square)](https://github.com/alexisromtz-lab/git-preflight-gate)
 [![platino-ai-gate](https://img.shields.io/badge/platino--ai--gate-commit_provenance-111111?style=flat-square)](https://github.com/alexisromtz-lab/platino-ai-gate)
-[![corpus-medido](https://img.shields.io/badge/corpus--medido-56_rules-111111?style=flat-square)](https://github.com/alexisromtz-lab/corpus-medido)
+<!-- HUELLA-PERFIL-BADGE-SIN-CIFRA-SIN-LECTOR-20261106 -->
+[![corpus-medido](https://img.shields.io/badge/corpus--medido-measurement_rules-111111?style=flat-square)](https://github.com/alexisromtz-lab/corpus-medido)
 [![la-auditora](https://img.shields.io/badge/la--auditora-live-111111?style=flat-square)](https://github.com/alexisromtz-lab/la-auditora)
 [![platino-data-room](https://img.shields.io/badge/platino--data--room-pinned_to_a_commit-111111?style=flat-square)](https://github.com/alexisromtz-lab/platino-data-room)
 
@@ -273,6 +274,23 @@ they doubt the laboratory.
 Python · Bash · GitHub Actions (workflow authority topology, SHA-pinned actions, OIDC sinks) · pytest &
 property-based testing · AST / YAML validation · LLM serving (vLLM) · reproducibility bundles (CFF,
 Zenodo, ORCID).
+
+<!-- HUELLA-PERFIL-INSTALADOR-CANDADO-20261106 -->
+## Working on this profile
+
+The badges above are measured, not typed — and so is the push. The lock is
+versioned in `hooks/pre-push`, but git does not clone `.git/hooks/`, so a fresh
+clone carries no lock until it is armed once:
+
+```bash
+bash hooks/instalar.sh       # RC 0 = CANDADO ACTIVO
+```
+
+From then on every `git push` — and every `git push --dry-run` — measures the
+`README.md` **of the commit that travels**, not the live page: a camo-proxied
+image, a bare badge or a hand-written count blocks the push instead of
+publishing itself. The instrument is the corpus's `verificar_vitrina.py`;
+`VITRINA_INSTRUMENTO` and `VITRINA_PYTHON` override where it is found.
 
 ## Elsewhere
 
