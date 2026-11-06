@@ -19,8 +19,8 @@ metrology, shipped as instruments anyone can re-run — and as products people p
 <!-- HUELLA-PERFIL-BADGES-CODIGO-20261106 -->
 [![git-preflight-gate](https://img.shields.io/badge/git--preflight--gate-fail--closed-111111?style=flat-square)](https://github.com/alexisromtz-lab/git-preflight-gate)
 [![platino-ai-gate](https://img.shields.io/badge/platino--ai--gate-commit_provenance-111111?style=flat-square)](https://github.com/alexisromtz-lab/platino-ai-gate)
-<!-- HUELLA-PERFIL-BADGE-SIN-CIFRA-SIN-LECTOR-20261106 -->
-[![corpus-medido](https://img.shields.io/badge/corpus--medido-measurement_rules-111111?style=flat-square)](https://github.com/alexisromtz-lab/corpus-medido)
+<!-- HUELLA-PERFIL-BADGE-MEDIDO-CON-LECTOR-20261106 -->
+[![corpus-medido](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Falexisromtz-lab%2Fcorpus-medido%2Fmain%2Fbadges%2Freglas.json&query=%24.message&label=corpus--medido&color=111111&style=flat-square)](https://github.com/alexisromtz-lab/corpus-medido)
 [![la-auditora](https://img.shields.io/badge/la--auditora-live-111111?style=flat-square)](https://github.com/alexisromtz-lab/la-auditora)
 [![platino-data-room](https://img.shields.io/badge/platino--data--room-pinned_to_a_commit-111111?style=flat-square)](https://github.com/alexisromtz-lab/platino-data-room)
 
@@ -51,7 +51,9 @@ one ships with its own apparatus: `tests/test_paridad_perfil.py` reads *this fil
 declared figure stops matching its table, when a cited repository leaves the measured public census
 (`censo_medido.json`, signed by `tools/medir_censo.py --aplicar`), or when a sentence cites a
 repository it never lists. The price further down is not typed either: `tools/medir_precio.py --check`
-compares it against the live page and names the plan that moved. You do not have to believe this page —
+compares it against the live page and names the plan that moved. The `corpus-medido` badge is the same
+idea one layer down: it does not carry a number, it carries an endpoint that
+`tools/medir_reglas.py --check` goes red on when the corpus drifts. You do not have to believe this page —
 clone it and watch it fail.
 
 <!-- HUELLA-PERFIL-TRES-PUERTAS-20261031 -->
@@ -93,7 +95,7 @@ already pointed at my own repository, in public, with their red days intact.
 | 7 | [`la-auditora`](https://github.com/alexisromtz-lab/la-auditora) | the audit service itself: supply-chain and CI failure diagnosis, published as a live page |
 | 8 | [`platino-data-room`](https://github.com/alexisromtz-lab/platino-data-room) | the evidence room: every audit graph pinned to a commit, released as an index |
 | 9 | [`platino-ai-gate`](https://github.com/alexisromtz-lab/platino-ai-gate) | two git hooks that make every commit declare which model wrote it — and reject `Model: none` on real code |
-| 10 | [`corpus-medido`](https://github.com/alexisromtz-lab/corpus-medido) | the citable layer: 56 measurement rules in seven families, with every deposited note and the checksum that verifies it |
+| 10 | [`corpus-medido`](https://github.com/alexisromtz-lab/corpus-medido) | the citable layer: the measurement rules in seven families, with every deposited note and the checksum that verifies it — the count is the badge above, read from `badges/reglas.json` |
 
 <!-- HUELLA-PERFIL-OFERTA-2-20261030 -->
 
@@ -205,7 +207,7 @@ declared set is satisfied while the import is doomed.
 Written up, deposited, discussed upstream, and now with a public corpus behind it:
 [**Coherence is not completeness**](https://doi.org/10.5281/zenodo.23955654) · [10.5281/zenodo.23955654](https://doi.org/10.5281/zenodo.23955654)
 · thread: [`astral-sh/uv#13963`](https://github.com/astral-sh/uv/issues/13963)
-· rules: [`corpus-medido`](https://github.com/alexisromtz-lab/corpus-medido) — 56 measurement rules, Apache-2.0 / CC BY 4.0
+· rules: [`corpus-medido`](https://github.com/alexisromtz-lab/corpus-medido) — the measurement rules, Apache-2.0 / CC BY 4.0
 
 ---
 
