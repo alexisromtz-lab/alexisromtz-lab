@@ -16,14 +16,24 @@ metrology, shipped as instruments anyone can re-run — and as products people p
 <!-- HUELLA-PERFIL-ZENODO-BADGE-CLICKABLE-20261106 -->
 <!-- HUELLA-PERFIL-ZENODO-BADGE-DINAMICO-20261106 -->
 [![Zenodo](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fzenodo.org%2Fapi%2Frecords%3Fq%3Dcreators.orcid%3A0009-0001-9116-075X%26size%3D1&query=hits.total&label=Zenodo&suffix=%20deposits&logo=zenodo&logoColor=white&color=1682D4&style=flat-square)](https://zenodo.org/search?q=creators.orcid%3A0009-0001-9116-075X)
-[![Studio City](https://img.shields.io/badge/Studio_City-live-111111?style=flat-square)](https://studiocity.app/)
-[![Barber Labs](https://img.shields.io/badge/Barber_Labs-live-111111?style=flat-square)](https://studiocity.app/barber-labs)
-[![Padel Labs](https://img.shields.io/badge/Padel_Labs-live-111111?style=flat-square)](https://studiocity.app/padel)
+<!-- HUELLA-PERFIL-BADGES-CODIGO-20261106 -->
+[![git-preflight-gate](https://img.shields.io/badge/git--preflight--gate-fail--closed-111111?style=flat-square)](https://github.com/alexisromtz-lab/git-preflight-gate)
+[![platino-ai-gate](https://img.shields.io/badge/platino--ai--gate-commit_provenance-111111?style=flat-square)](https://github.com/alexisromtz-lab/platino-ai-gate)
+[![corpus-medido](https://img.shields.io/badge/corpus--medido-56_rules-111111?style=flat-square)](https://github.com/alexisromtz-lab/corpus-medido)
+[![la-auditora](https://img.shields.io/badge/la--auditora-live-111111?style=flat-square)](https://github.com/alexisromtz-lab/la-auditora)
+[![platino-data-room](https://img.shields.io/badge/platino--data--room-pinned_to_a_commit-111111?style=flat-square)](https://github.com/alexisromtz-lab/platino-data-room)
 
 I work on **failure diagnosis at the systems level**: CI pipelines, LLM inference serving, and
-evaluation harnesses. My working rule is that *a number that cannot differ is not evidence* — every
-claim below carries the object that produced it, and every gate I ship fails closed when it has
-nothing to measure.
+evaluation harnesses.
+
+<!-- HUELLA-PERFIL-FRASE-RESTAURADA-20261106 -->
+
+> **«Un número que no deriva no es una confirmación.»**
+>
+> *A number that does not derive is not a confirmation* — a figure that cannot be made to differ is
+> not evidence. It is the house rule, and it has one consequence that shows in everything below:
+> every claim carries the object that produced it, and every gate I ship fails closed when it has
+> nothing to measure.
 
 **No adivinamos: medimos** — *we do not guess, we measure.* Platino Labs is an applied
 computational-physics laboratory that sells software: the discipline that decides whether a numerical
@@ -32,49 +42,16 @@ instruments further down are the pedigree — and every one of them publishes it
 as results.
 
 **Full record:** [Open Source Diagnostics — a measured record](https://github.com/alexisromtz-lab/auditor-toolkit/blob/main/case_studies/tt-metal.md)
-<!-- HUELLA-PERFIL-PRODUCTOS-3-20261031 -->
 
-## What we ship — three live products
+<!-- HUELLA-PERFIL-NIVEL-6-MEDIDO-20261106 -->
 
-The instruments further down are the hook. This is the product line they come out of: **Studio City**, a
-booking platform for boutique studios, and two verticals that run on the same booking core.
-
-| Product | What it is | Live route | What the site charges |
-|---|---|---|---|
-| **Studio City** | booking platform for boutique studios — hourly reservations, owner dashboard, per-hour schedule | [studiocity.app](https://studiocity.app/) | `Básico $299/mes` · `Pro $599/mes` · `Premium $899/mes` |
-| **Barber Labs** | the barbershop vertical: appointment system built on the Studio City booking core | [studiocity.app/barber-labs](https://studiocity.app/barber-labs) | the same plan ladder — one booking core, one price list |
-| **Padel Labs** | the court-slot vertical: scheduled play built on the same core | [studiocity.app/padel](https://studiocity.app/padel) | the same plan ladder — one booking core, one price list |
-
-Each route is checked against a negative control on the same host: an unregistered slug renders the
-generic template, a real product renders its own title. Measured 2026-10-31 —
-`/` → *Studio City — La plataforma integral para estudios boutique* · `/barber-labs` →
-*Barber Labs — Sistema de citas para barberías | Studio City* · `/padel` → *Padel Labs · Studio City* ·
-control `/zzz-control-negativo-xyz` → *Estudio · Studio City*.
-
-The same rule that governs the instruments governs the products: what is written is what a command
-can be pointed at. Commercial figures for the line — studios registered, studios on a paid plan,
-currency collected — are **not** published here, because this page does not measure them. They live
-in the evidence room with their command, or they are not claimed.
-
-<!-- HUELLA-PERFIL-PRECIO-MEDIDO-20261101 -->
-
-**The entry price, measured — not quoted.** On 2026-11-01 the public pricing surface publishes three
-plans and one headline, and nothing else:
-
-```bash
-curl -s https://studiocity.app/ | grep -o '\$[0-9]\{3\}/mes'                 # → $299/mes
-curl -s https://studiocity.app/ | grep -o -E 'Básico|Pro|Premium'            # → the three tier names
-```
-
-`Básico $299/mes` · `Pro $599/mes` · `Premium $899/mes`, headlined *«Prueba gratis · Planes desde
-$299/mes · Sin permanencia · Sin comisiones»*. The entry price is therefore **$299/mes**, and that is
-the only one this page publishes.
-
-A launch condition of `$99/mes` for the first three months circulates internally and is **not
-published on the site** — so it is not published here either. Two public sources quoting different
-numbers for the same product is precisely the defect this page is built to refuse: a prospect who
-reads `$99` here and `$299` there does not doubt the price, they doubt the laboratory. If that
-condition ever ships on the site, it ships here in the same commit, and never before.
+**Nivel 6 — the page measures itself.** A profile is usually the one artifact nobody audits, so this
+one ships with its own apparatus: `tests/test_paridad_perfil.py` reads *this file* and turns red when a
+declared figure stops matching its table, when a cited repository leaves the measured public census
+(`censo_medido.json`, signed by `tools/medir_censo.py --aplicar`), or when a sentence cites a
+repository it never lists. The price further down is not typed either: `tools/medir_precio.py --check`
+compares it against the live page and names the plan that moved. You do not have to believe this page —
+clone it and watch it fail.
 
 <!-- HUELLA-PERFIL-TRES-PUERTAS-20261031 -->
 
@@ -86,7 +63,7 @@ before anyone talks to me.
 
 | Door | What you get | What you can check before the first call |
 |---|---|---|
-| **Build — SaaS** | a booking platform and the verticals that run on it: hourly agenda, owner dashboard, price per slot | three live routes whose titles survive a negative control — see **What we ship** above |
+| **Build — SaaS** | a booking platform and the verticals that run on it: hourly agenda, owner dashboard, price per slot | three live routes whose titles survive a negative control — see **What we ship** below |
 | **Audit — diagnosis** | CI and supply-chain failure diagnosis, priced per finding, delivered as a report whose every graph is pinned to a commit | [live service page](https://alexisromtz-lab.github.io/la-auditora/) · [evidence room, 36 assets pinned to a commit](https://github.com/alexisromtz-lab/platino-data-room/releases/tag/arch-index-20261029-batch2) |
 | **Secure — the writes** | a pre-flight gate that proves the identity of the destination *before* writing, and commits that must declare which model wrote them | [`git-preflight-gate`](https://github.com/alexisromtz-lab/git-preflight-gate) fails closed when it cannot measure · [`platino-ai-gate`](https://github.com/alexisromtz-lab/platino-ai-gate) rejects `Model: none` on real code |
 
@@ -96,9 +73,9 @@ they are listed here as **capability, not proof** — declared, and `NO_MEDIDO` 
 standing. A page that shows three doors and hides which two have no published case is a brochure; this
 one carries the boundary in the same paragraph as the offer.
 
-<!-- HUELLA-PERFIL-START-HERE-8-20261030 -->
+<!-- HUELLA-PERFIL-START-HERE-10-20261106 -->
 
-## Start here — nine repositories, in this order
+## Start here — ten repositories, in this order
 
 **The arsenal.** Everything in this table is public, downloadable, and runs without talking to me —
 that is the whole point. These are the instruments the audit door above is built from, and they are
@@ -115,6 +92,7 @@ already pointed at my own repository, in public, with their red days intact.
 | 7 | [`la-auditora`](https://github.com/alexisromtz-lab/la-auditora) | the audit service itself: supply-chain and CI failure diagnosis, published as a live page |
 | 8 | [`platino-data-room`](https://github.com/alexisromtz-lab/platino-data-room) | the evidence room: every audit graph pinned to a commit, released as an index |
 | 9 | [`platino-ai-gate`](https://github.com/alexisromtz-lab/platino-ai-gate) | two git hooks that make every commit declare which model wrote it — and reject `Model: none` on real code |
+| 10 | [`corpus-medido`](https://github.com/alexisromtz-lab/corpus-medido) | the citable layer: 56 measurement rules in seven families, with every deposited note and the checksum that verifies it |
 
 <!-- HUELLA-PERFIL-OFERTA-2-20261030 -->
 
@@ -148,10 +126,10 @@ results as results** — the criterion that fails is the one that stays sealed:
 | [`optica-kerr-2d`](https://github.com/alexisromtz-lab/optica-kerr-2d) | 2D TE Kerr propagation, object vs falsifier | object **ROJO** at `13.11 %` against a sealed `0.03`, and the `χ³ = 0` falsifier **passes on both sides** (beam diffracts `19.06 %` ⇒ the solver cannot confine by itself) |
 | [`sfqed-paper`](https://github.com/alexisromtz-lab/sfqed-paper) | strong-field QED paper **and its measuring apparatus** | 35-file verifiable bundle (34 declared + the manifest that cannot declare itself), one-command gate, 7-case *must-fail* bench that measures the verifier from outside — plus four **declared** unsealed items (`MOTORES.md` §6) and its own [methodology and boundaries](https://github.com/alexisromtz-lab/sfqed-paper/blob/main/METHODOLOGY_AND_BOUNDARIES.md) |<!-- HUELLA-PERFIL-SFQED-35-Y-METODO-20261020 -->
 
-The rule did not change when the object changed from a field to a benchmark: **a number that cannot
-differ is not evidence.** Nor did it change when the object turned out *negative*: a criterion that
-fails is published with its raw capture and its command, and the threshold is never moved to make it
-pass.
+The rule did not change when the object changed from a field to a benchmark — the criterion is the
+same, and so is the way it is allowed to fail. Nor did it change when the object turned out
+*negative*: a criterion that fails is published with its raw capture and its command, and the
+threshold is never moved to make it pass.
 
 ---
 
@@ -229,6 +207,58 @@ Written up, deposited, discussed upstream, and now with a public corpus behind i
 · rules: [`corpus-medido`](https://github.com/alexisromtz-lab/corpus-medido) — 56 measurement rules, Apache-2.0 / CC BY 4.0
 
 ---
+
+<!-- HUELLA-PERFIL-PRODUCTOS-4-20261106 -->
+
+## What we ship — three live products
+
+The laboratory is funded by products, not the other way round. This block sits at the **end** of the
+page on purpose: a landing page can be looked at, a repository can be re-run, and the item that can be
+re-run is the one that belongs first. What follows is the commercial application of the instruments
+above — **Studio City**, a booking platform for boutique studios, and two verticals on the same core.
+
+| Product | What it is | Live route |
+|---|---|---|
+| **Studio City** | booking platform for boutique studios — hourly reservations, owner dashboard, per-hour schedule | [studiocity.app](https://studiocity.app/) |
+| **Barber Labs** | the barbershop vertical: appointment system built on the Studio City booking core | [studiocity.app/barber-labs](https://studiocity.app/barber-labs) |
+| **Padel Labs** | the court-slot vertical: scheduled play built on the same core | [studiocity.app/padel](https://studiocity.app/padel) |
+
+Each route is checked against a negative control on the same host: an unregistered slug renders the
+generic template, a real product renders its own title. Measured 2026-10-31 —
+`/` → *Studio City — La plataforma integral para estudios boutique* · `/barber-labs` →
+*Barber Labs — Sistema de citas para barberías | Studio City* · `/padel` → *Padel Labs · Studio City* ·
+control `/zzz-control-negativo-xyz` → *Estudio · Studio City*.
+
+The same rule that governs the instruments governs the products: what is written is what a command
+can be pointed at. Commercial figures for the line — studios registered, studios on a paid plan,
+currency collected — are **not** published here, because this page does not measure them. They live
+in the evidence room with their command, or they are not claimed.
+
+<!-- HUELLA-PERFIL-PRECIO-MEDIDO-20261106 -->
+
+**The price ladder, measured — not quoted.** On 2026-11-06 the public pricing surface publishes three
+plans and one launch condition, and nothing else. It is re-measurable with the instrument that ships
+in this repository, which parses the live page instead of repeating a number typed here:
+
+```bash
+python3 tools/medir_precio.py --check       # captura ↔ sitio ↔ README · RC 0, o RC 1 con la celda culpable
+python3 tools/medir_precio.py --aplicar     # firma una captura nueva: la única vía para mover una cifra
+curl -s https://studiocity.app/             # el sujeto declarado, crudo
+```
+
+`Básico $499/mes` · `Pro $799/mes` · `Ilimitado $1,199/mes`, captured in `precio_medido.json` at
+2026-11-06T19:19:21Z from `https://studiocity.app/`. The entry price is **$499/mes** — and no figure
+on this page is typed from memory: if the site moves, `tools/medir_precio.py --check` turns red and
+names the plan that moved before this commit ever reaches `main`.
+
+A launch condition of `$249/mes` for the first month **is published on the site** — the stat strip
+reads *Lanzamiento · primer mes* — so it is published here, in the same commit as the site and never
+before. If it disappears from the site, the check above goes red and the figure leaves this page in
+that same commit.
+
+Two public sources quoting different numbers for the same product is precisely the defect this page
+exists to refuse: a prospect who reads one figure here and another there does not doubt the price,
+they doubt the laboratory.
 
 ## What I actually do
 

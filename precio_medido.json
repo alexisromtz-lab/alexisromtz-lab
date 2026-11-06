@@ -1,0 +1,26 @@
+{
+  "sujeto": "https://studiocity.app/",
+  "comando": "curl -s https://studiocity.app/",
+  "medido_en": "2026-11-06T19:19:21Z",
+  "escalera": [
+    {
+      "plan": "Básico",
+      "importe": "499",
+      "periodo": "/mes"
+    },
+    {
+      "plan": "Pro",
+      "importe": "799",
+      "periodo": "/mes"
+    },
+    {
+      "plan": "Ilimitado",
+      "importe": "1,199",
+      "periodo": "/mes"
+    }
+  ],
+  "lanzamiento": {
+    "importe": "249",
+    "etiqueta": "Lanzamiento · primer mes"
+  }
+}
