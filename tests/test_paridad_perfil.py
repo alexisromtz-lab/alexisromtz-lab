@@ -9,7 +9,7 @@ lo que el README **declara** y lo que el README **contiene**:
 
   1. Cuerpo y huellas — el README existe, pasa de 50 líneas y lleva sus marcas.
   2. Cifra declarada = filas medidas, en los DOS inventarios:
-       · «## Start here — six repositories» declara SEIS y su tabla tiene 6 filas;
+       · «## Start here — ten repositories» declara DIEZ y su tabla tiene 10 filas;
        · la huella `HUELLA-PERFIL-FISICA-7-INSTRUMENTOS` declara SIETE y la tabla
          de `## Origin` tiene 7 filas.
      La cifra se LEE del texto: mover una fila sin mover su declaración es rojo.
@@ -22,14 +22,15 @@ lo que el README **declara** y lo que el README **contiene**:
   6. Enlaces absolutos — cero rutas relativas (un perfil de GitHub no resuelve
      rutas relativas) y cero enlaces al namespace sin repositorio.
 
-CENSO: de dónde sale y por qué está pineado. Medido el 2026-10-22 con
-`gh repo list alexisromtz-lab --limit 200 --json name,visibility` filtrando
-`visibility == "PUBLIC"` (19 repos). El mismo día el núcleo del laboratorio pasó a privado y se
-publicó `auditoria-ci`: el censo se vuelve a medir, no se ensancha a ojo. El CI de este aparato no consulta la API:
-el censo es un DATO FECHADO y se declara como tal. El invariante es de dirección
-única, `citado ⊆ censo`: un repositorio público NUEVO no rompe el perfil; un
-enlace a uno inexistente sí. Cuando el namespace cambie, se vuelve a medir y se
-mueve la fecha — no se ensancha el censo a ojo para que el test pase.
+CENSO: de dónde sale y por qué NO es una constante. El censo se LEE de la captura
+firmada que produce `tools/medir_censo.py --aplicar` (`censo_medido.json`: fecha,
+comando y lista de repositorios públicos). Una lista congelada en este archivo no
+puede diferir, y lo que no puede diferir no es evidencia: la de 2026-10-30 envejeció
+a 23 repositorios y el rojo culpó al README de un enlace que sí existía — el defecto
+estaba en el instrumento, no en el objeto. Una captura ausente o ilegible NO se lee
+como censo vacío: se publica `CENSO_NO_MEDIDO` y enrojece con su causa (fail-closed).
+El invariante sigue siendo de dirección única, `citado ⊆ censo`: un repositorio
+público NUEVO no rompe el perfil; un enlace a uno inexistente sí.
 
 Falsadores (lo que hace rojo a este banco; cada uno se ejercita abajo sobre una
 copia mutada del README, por el MISMO código de producción, no sobre una
@@ -46,44 +47,41 @@ constante):
 
 from __future__ import annotations
 
+import json
 import re
+import subprocess
+import sys
 from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parents[1]
 README = RAIZ / "README.md"
 
-# HUELLA-CENSO-REMEDIDO-22-20261030
-CENSO_MEDIDO = "2026-10-30"
-CENSO_COMANDO = (
-    "gh repo list alexisromtz-lab --limit 200 --json name,visibility "
-    "--jq '[.[] | select(.visibility==\"PUBLIC\") | .name]'"
-)
-CENSO_PUBLICO = frozenset(
-    {
-        "acustica-monotile",
-        "alexisromtz-lab",
-        "ast-channel-router",
-        "auditor-toolkit",
-        "auditoria-ci",
-        "ci-fail-closed-falsifier",
-        "fotonica-monotile",
-        "git-preflight-gate",
-        "gw-rw-zerilli",
-        "la-auditora",
-        "optica-kerr-2d",
-        "plasma-ade",
-        "platino-ai-gate",
-        "platino-corpus",
-        "platino-data-room",
-        "protocol-core",
-        "protocol-core-dist",
-        "qnm",
-        "red-green-sandbox",
-        "rf-signal-integrity",
-        "sfqed-paper",
-        "vllm-omni",
-    }
-)
+# HUELLA-CENSO-CAPTURA-FIRMADA-20261106
+CENSO_CAPTURA = RAIZ / "censo_medido.json"
+
+
+def _leer_censo(ruta: Path = CENSO_CAPTURA) -> tuple[str, str, frozenset[str], str]:
+    """(fecha, comando, repositorios, error). Error vacío = censo medido."""
+    if not ruta.is_file():
+        return "", "", frozenset(), f"captura ausente: {ruta.name}"
+    try:
+        datos = json.loads(ruta.read_text(encoding="utf-8"))
+    except ValueError as exc:  # JSON ilegible es un dato, no un accidente
+        return "", "", frozenset(), f"{ruta.name} no es JSON: {exc}"
+    if not isinstance(datos, dict):
+        return "", "", frozenset(), f"{ruta.name} no declara un objeto"
+    publicos = datos.get("publicos")
+    if not isinstance(publicos, list) or not publicos:
+        return "", "", frozenset(), f"{ruta.name} no declara repositorios públicos"
+    return (
+        str(datos.get("medido_en", "")),
+        str(datos.get("comando", "")),
+        frozenset(str(x) for x in publicos),
+        "",
+    )
+
+
+CENSO_MEDIDO, CENSO_COMANDO, CENSO_PUBLICO, CENSO_ERROR = _leer_censo()
 
 SECCION_INICIO = "## Start here"
 SECCION_ORIGEN = "## Origin"
@@ -172,6 +170,9 @@ def auditar(t: str) -> list[str]:
     """Todas las violaciones del contrato del perfil. Lista vacía = contrato cumplido."""
     v: list[str] = []
 
+    if CENSO_ERROR:
+        v.append(f"CENSO_NO_MEDIDO: {CENSO_ERROR}")
+
     lineas = len(t.splitlines())
     if lineas < MIN_LINEAS:
         v.append(f"README_VACIO: {lineas} líneas < {MIN_LINEAS}")
@@ -239,29 +240,31 @@ def violaciones(clase: str, t: str) -> list[str]:
 
 # ------------------------------------------------------------- bloque de precio
 # El precio es el único campo comercial que este README publica, y por eso es el
-# único que puede contradecir a la página viva. Medido el 2026-11-01 con
-#   curl -s https://studiocity.app/ | grep -o '\$[0-9]\{3\}/mes'
-#   → $299/mes en el encabezado · Básico $299 · Pro $599 · Premium $899
-# El `$99/mes` de los tres primeros meses es una CONDICIÓN DE LANZAMIENTO que el
-# sitio NO publica. Por eso sólo puede aparecer dentro de este bloque y junto a
-# su cláusula: fuera de él, un `$99` es una oferta que la página no respalda, y
-# dos fuentes públicas con cifras distintas es el defecto que este perfil existe
-# para no cometer.
-# <!-- HUELLA-PERFIL-PRECIO-CLAUSULA-NORMALIZADA-20261101 -->
-# Adenda: la primera versión buscaba los literales sobre el texto crudo y se puso
-# roja sobre su propio objeto sano — el README envuelve párrafos a ~100 columnas y
-# `not published on the site` quedaba partido en dos líneas. Un instrumento que
-# enrojece sobre el sujeto correcto no mide el sujeto: mide su propio ancho de
-# línea. Los literales se buscan ahora sobre el bloque con el espaciado colapsado,
-# y el sujeto del precio (`FUENTE_PRECIO`) deja de ser cualquier `curl` para ser
-# la URL concreta que se midió.
-HUELLA_PRECIO = "HUELLA-PERFIL-PRECIO-MEDIDO-20261101"
-PRECIO_ENTRADA = "$299/mes"
-FECHA_PRECIO = "2026-11-01"
-CLAUSULA_PRECIO = "not published on the site"
+# único que puede contradecir a la página viva. Medido el 2026-11-06 con
+#   curl -s https://studiocity.app/ | grep -o '\$[0-9,]*/mes'
+#   → Básico $499 · Pro $799 · Ilimitado $1,199 · tira de lanzamiento $249 (primer mes)
+# La escalera que este contrato exigía antes ($299 · $599 · $899 «Premium») es el
+# objeto de la captura 2026-11-01: el sitio la movió y el README la seguía publicando.
+# La captura firmada (`precio_medido.json`, `tools/medir_precio.py --aplicar`) es la
+# única vía para mover una cifra; este archivo coteja README ↔ captura, y
+# `--check` coteja captura ↔ sitio. Un número que nadie volvió a medir no es cifra.
+# <!-- HUELLA-PERFIL-PRECIO-CLAUSULA-NORMALIZADA-20261106 -->
+# Adenda: los literales se buscan sobre el bloque con el espaciado colapsado — el
+# README envuelve párrafos a ~100 columnas y un instrumento que enrojece por el ancho
+# de línea no mide el sujeto. La cláusula cambió de signo: la condición de lanzamiento
+# antes NO estaba publicada en el sitio ($99) y publicarla era el defecto; ahora SÍ lo
+# está ($249, *Lanzamiento · primer mes*), así que el contrato ya no la prohíbe: exige
+# que viaje pegada a su cláusula y dentro del bloque medido.
+HUELLA_PRECIO = "HUELLA-PERFIL-PRECIO-MEDIDO-20261106"
+PRECIO_ENTRADA = "$499/mes"
+FECHA_PRECIO = "2026-11-06"
+PLANES = ("Básico", "Pro", "Ilimitado")
+LANZAMIENTO = "$249/mes"
+CLAUSULA_LANZAMIENTO = "is published on the site"
 FUENTE_PRECIO = "https://studiocity.app/"
-RE_CLAUSULA = re.compile(r"not\s+published\s+on\s+the\s+site")
-RE_NOVENTA_NUEVE = re.compile(r"\$ ?99(?!\d)")
+COMANDO_PRECIO = "tools/medir_precio.py --check"
+RE_CLAUSULA = re.compile(r"is\s+published\s+on\s+the\s+site")
+RE_LANZAMIENTO = re.compile(r"\$ ?249(?!\d)")
 
 
 def bloque_precio(t: str) -> str:
@@ -296,11 +299,19 @@ def auditar_precio(t: str) -> list[str]:
         v.append("PRECIO_SIN_COMANDO: el bloque no publica el comando que lo mide")
     if FUENTE_PRECIO not in visto:
         v.append(f"PRECIO_SIN_SUJETO: el bloque no nombra la fuente medida {FUENTE_PRECIO!r}")
-    if CLAUSULA_PRECIO not in visto:
-        v.append(f"PRECIO_SIN_CLAUSULA: el bloque no declara {CLAUSULA_PRECIO!r}")
-    for m in RE_NOVENTA_NUEVE.finditer(t):
+    if CLAUSULA_LANZAMIENTO not in visto:
+        v.append(f"PRECIO_SIN_CLAUSULA: el bloque no declara {CLAUSULA_LANZAMIENTO!r}")
+    if COMANDO_PRECIO not in visto:
+        v.append(
+            f"PRECIO_SIN_INSTRUMENTO: el bloque no publica el comando que lo coteja "
+            f"{COMANDO_PRECIO!r}"
+        )
+    for plan in PLANES:
+        if plan not in visto:
+            v.append(f"PRECIO_SIN_PLAN: el bloque no publica el plan {plan!r}")
+    for m in RE_LANZAMIENTO.finditer(t):
         if not i <= m.start() < fin:
-            v.append(f"PRECIO_SIN_CLAUSULA: `$99` fuera del bloque medido (offset {m.start()})")
+            v.append(f"PRECIO_SIN_CLAUSULA: `$249` fuera del bloque medido (offset {m.start()})")
     return v
 
 
@@ -349,8 +360,10 @@ def test_las_filas_de_inicio_estan_numeradas_sin_huecos():
 
 def test_ningun_repositorio_citado_es_huerfano_del_censo():
     t = texto()
+    assert not violaciones("CENSO_NO_MEDIDO", t), violaciones("CENSO_NO_MEDIDO", t)
     assert not violaciones("REPO_HUERFANO", t), violaciones("REPO_HUERFANO", t)
     assert CENSO_COMANDO.strip(), "el censo tiene que declarar cómo se midió"
+    assert CENSO_MEDIDO.strip(), "el censo tiene que declarar cuándo se midió"
     assert len(CENSO_PUBLICO) >= 19, len(CENSO_PUBLICO)
 
 
@@ -438,16 +451,18 @@ def test_el_precio_de_entrada_es_el_que_publica_el_sitio():
     """La cifra que este README vende no puede diferir de la que cobra la página."""
     bloque = bloque_precio(texto())
     assert PRECIO_ENTRADA in bloque, f"el bloque no publica {PRECIO_ENTRADA!r}"
-    assert "Básico" in bloque and "Premium" in bloque, "el bloque no publica la escalera de planes"
+    for plan in PLANES:
+        assert plan in bloque, f"el bloque no publica el plan {plan!r}"
+    assert LANZAMIENTO in bloque, f"el bloque no publica el lanzamiento {LANZAMIENTO!r}"
 
 
-def test_falsador_precio_99_vendido_fuera_del_bloque():
-    """El control que el CEO pidió: publicar `$99` como precio tiene que doler."""
+def test_falsador_lanzamiento_vendido_fuera_del_bloque():
+    """El control que el CEO pidió: publicar `$249` como precio tiene que doler."""
     mutado = _sustituir_en(
-        texto(), SECCION_PRODUCTOS, "| **Studio City**", "| `$99/mes` · **Studio City**"
+        texto(), SECCION_PRODUCTOS, "| **Studio City**", "| `$249/mes` · **Studio City**"
     )
     assert not violaciones_precio("PRECIO_NO_CASA", mutado), "el control no aísla la cláusula"
-    assert violaciones_precio("PRECIO_SIN_CLAUSULA", mutado), "el auditor aceptó un `$99` de oferta"
+    assert violaciones_precio("PRECIO_SIN_CLAUSULA", mutado), "el auditor aceptó un `$249` de oferta"
 
 
 def test_falsador_precio_sin_comando():
@@ -473,7 +488,7 @@ def test_la_clausula_sobrevive_al_salto_de_linea():
     """Regresión: el sujeto sano no puede enrojecer por el ancho del párrafo."""
     t = texto()
     bloque = bloque_precio(t)
-    partido = RE_CLAUSULA.sub("not published\non the site", bloque, count=1)
+    partido = RE_CLAUSULA.sub("is published\non the site", bloque, count=1)
     assert partido != bloque, "el bloque dejó de declarar la cláusula que esta prueba parte"
     assert auditar_precio(t.replace(bloque, partido, 1)) == [], (
         "el auditor mide el ancho de línea del README, no el precio que publica"
@@ -499,3 +514,70 @@ def test_falsador_precio_sin_sujeto():
     assert [x.split(":")[0] for x in auditar_precio(mutado)] == ["PRECIO_SIN_SUJETO"], (
         "el auditor aceptó un precio sin la fuente que lo mide"
     )
+
+
+# ------------------------------------------------- el instrumento, ejercitado
+def test_los_instrumentos_se_autovalidan():
+    """Un instrumento que no pasa su propio banco no mide nada: se ejerce, no se confía."""
+    for nombre in ("medir_precio.py", "medir_censo.py"):
+        herramienta = RAIZ / "tools" / nombre
+        assert herramienta.is_file(), f"INSTRUMENTO_AUSENTE: {herramienta}"
+        r = subprocess.run(
+            [sys.executable, str(herramienta), "--self-test"],
+            cwd=str(RAIZ),
+            capture_output=True,
+            text=True,
+            timeout=180,
+        )
+        assert r.returncode == 0, f"{nombre} --self-test ⇒ RC {r.returncode}\n{r.stdout}{r.stderr}"
+
+
+def test_el_instrumento_del_precio_coteja_captura_y_readme():
+    """Offline: README ↔ captura firmada. La red la mide `--check`, no el CI."""
+    r = subprocess.run(
+        [sys.executable, str(RAIZ / "tools" / "medir_precio.py"), "--check-readme"],
+        cwd=str(RAIZ),
+        capture_output=True,
+        text=True,
+        timeout=120,
+    )
+    assert r.returncode == 0, f"RC {r.returncode} · {r.stdout}{r.stderr}"
+
+
+def test_falsador_captura_del_precio_desfasada(tmp_path):
+    """Mover una cifra en la captura sin volver a medir el sitio enrojece el cotejo."""
+    datos = json.loads((RAIZ / "precio_medido.json").read_text(encoding="utf-8"))
+    datos["escalera"][1]["importe"] = "899"
+    falsa = tmp_path / "precio_medido.json"
+    falsa.write_text(json.dumps(datos, ensure_ascii=False), encoding="utf-8")
+    r = subprocess.run(
+        [
+            sys.executable,
+            str(RAIZ / "tools" / "medir_precio.py"),
+            "--check-readme",
+            "--captura",
+            str(falsa),
+            "--readme",
+            str(README),
+        ],
+        cwd=str(RAIZ),
+        capture_output=True,
+        text=True,
+        timeout=120,
+    )
+    assert r.returncode == 1, f"la captura desfasada no enrojeció: RC {r.returncode}\n{r.stdout}{r.stderr}"
+
+
+def test_falsador_captura_del_censo_ausente(tmp_path):
+    """Un censo que no existe no es un censo vacío: es CENSO_NO_MEDIDO, con su causa."""
+    fecha, comando, publicos, error = _leer_censo(tmp_path / "NO_EXISTE.json")
+    assert error, "el lector aceptó una captura ausente como censo válido"
+    assert not publicos and not fecha and not comando
+
+
+def test_falsador_captura_del_censo_ilegible(tmp_path):
+    rota = tmp_path / "censo_medido.json"
+    rota.write_text("{no es json", encoding="utf-8")
+    _, _, publicos, error = _leer_censo(rota)
+    assert error, "el lector aceptó un JSON ilegible como censo válido"
+    assert not publicos
