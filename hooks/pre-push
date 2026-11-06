@@ -1,0 +1,70 @@
+#!/bin/sh
+# HUELLA-HOOK-VITRINA-PERFIL-20261106
+#
+# Mide la vitrina ANTES de publicarla.
+#
+# El sujeto es el commit que viaja (git show <sha>:README.md), no el arbol de
+# trabajo: lo que no se commitea no se publica, y medir el arbol en vuelo es
+# medir otra cosa. Tampoco es el perfil vivo: el perfil vivo va UNA publicacion
+# por detras, asi que habria aprobado la publicacion que introdujo el defecto
+# y habria prohibido la que lo repara.
+#
+# Politica de RC (fail-closed):
+#   0  -> pasa
+#   1  -> BLOQUEA (defecto medido: ancla camo, enlace roto o cifra literal)
+#   2  -> pasa IMPRIMIENDO el NO_MEDIDO (clase apagada o enlace que no se dejo
+#         medir: ni es cero ni es roto)
+#   otro (20, 31, 127...) -> BLOQUEA (no se pudo medir no es verde)
+#
+# Instrumento: $VITRINA_INSTRUMENTO (defecto ~/platino-labs/tools/verificar_vitrina.py)
+# Interprete : $VITRINA_PYTHON     (defecto python3)
+
+INSTRUMENTO=${VITRINA_INSTRUMENTO:-$HOME/platino-labs/tools/verificar_vitrina.py}
+PY=${VITRINA_PYTHON:-python3}
+
+if [ ! -f "$INSTRUMENTO" ]; then
+  echo "VITRINA BLOQUEA: no existe el instrumento $INSTRUMENTO" >&2
+  echo "  declara VITRINA_INSTRUMENTO=<ruta absoluta a verificar_vitrina.py>" >&2
+  exit 1
+fi
+
+tmp=$(mktemp "${TMPDIR:-/tmp}/vitrina.XXXXXX") || exit 1
+trap 'rm -f "$tmp"' EXIT
+
+ultimo=
+bloquea=0
+no_medido=0
+medidos=0
+
+while read -r _local_ref local_sha _remote_ref _remote_sha || [ -n "$local_sha" ]; do
+  case "$local_sha" in
+    ''|0000000000000000000000000000000000000000) continue ;;
+  esac
+  blob=$(git rev-parse "$local_sha:README.md" 2>/dev/null) || continue
+  [ "$blob" = "$ultimo" ] && continue
+  ultimo=$blob
+  git show "$local_sha:README.md" > "$tmp" || exit 1
+  medidos=$((medidos + 1))
+  echo "VITRINA: midiendo README.md de $local_sha"
+  "$PY" "$INSTRUMENTO" --markdown "$tmp"
+  case $? in
+    0) ;;
+    2) no_medido=1 ;;
+    *) bloquea=1 ;;
+  esac
+done
+
+if [ "$medidos" -eq 0 ]; then
+  echo "VITRINA: este push no transporta README.md; nada que medir."
+  exit 0
+fi
+if [ "$bloquea" -eq 1 ]; then
+  echo "VITRINA BLOQUEA: el README que se publica tiene un defecto medido." >&2
+  echo "  envuelve la imagen en un enlace y vuelve a empujar." >&2
+  exit 1
+fi
+if [ "$no_medido" -eq 1 ]; then
+  echo "VITRINA: NO_MEDIDO parcial (ver arriba). No es un cero ni un rojo: se publica."
+fi
+echo "VITRINA OK: $medidos README(s) medidos, cero defectos."
+exit 0
