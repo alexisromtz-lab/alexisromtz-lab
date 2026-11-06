@@ -7,13 +7,23 @@
 # hasta que la vitrina ya está rota. Esto es el acto que convierte un clon en
 # un clon vigilado.
 #
-# Uso:   bash hooks/instalar.sh
+# Uso:   bash hooks/instalar.sh          (o `bash /ruta/al/clon/hooks/instalar.sh`)
 # RC:    0 = candado activo · 1 = no se pudo activar (fail-closed, sin verde)
 # HUELLA-PERFIL-INSTALADOR-CANDADO-20261106
+# HUELLA-PERFIL-INSTALADOR-AUTOLOCALIZADO-20261106
 set -eu
 
-raiz=$(git rev-parse --show-toplevel 2>/dev/null) || {
-  echo "FALLO: $(pwd) no está dentro de un repositorio git" >&2; exit 1; }
+# La raíz se resuelve desde la ruta de ESTE archivo, no desde el directorio de
+# trabajo. Con `git rev-parse --show-toplevel` a secas, invocar el instalador
+# desde otra carpeta medía el repo de quien lo llama: desde /tmp daba «no está
+# dentro de un repositorio git» y desde otro repo nombraba el hook versionado
+# del repo ajeno. Los dos RC 1 describían el objeto equivocado.
+aqui=$(cd -- "$(dirname -- "${BASH_SOURCE[0]:-$0}")" && pwd -P)
+raiz=$(git -C "$aqui" rev-parse --show-toplevel 2>/dev/null) || {
+  echo "FALLO: $aqui no está dentro de un repositorio git" >&2; exit 1; }
+
+[ "$aqui" = "$raiz/hooks" ] || {
+  echo "FALLO: el instalador vive en $aqui, no en $raiz/hooks" >&2; exit 1; }
 
 origen="$raiz/hooks/pre-push"
 gitdir=$(git -C "$raiz" rev-parse --absolute-git-dir)
