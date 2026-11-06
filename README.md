@@ -8,10 +8,11 @@
 the commits along the way. The factory's product is measurement: applied computational physics and AI
 metrology, shipped as instruments anyone can re-run — and as products people pay for.
 
-![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white)
-![Bash](https://img.shields.io/badge/Bash-4EAA25?style=flat-square&logo=gnubash&logoColor=white)
-![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=flat-square&logo=githubactions&logoColor=white)
-![pytest](https://img.shields.io/badge/pytest-0A9EDC?style=flat-square&logo=pytest&logoColor=white)
+<!-- HUELLA-PERFIL-BADGES-TECNOLOGIA-CLICKABLES-20261106 -->
+[![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white)](https://www.python.org/)
+[![Bash](https://img.shields.io/badge/Bash-4EAA25?style=flat-square&logo=gnubash&logoColor=white)](https://www.gnu.org/software/bash/)
+[![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=flat-square&logo=githubactions&logoColor=white)](https://github.com/features/actions)
+[![pytest](https://img.shields.io/badge/pytest-0A9EDC?style=flat-square&logo=pytest&logoColor=white)](https://pytest.org/)
 <!-- HUELLA-PERFIL-ZENODO-BADGE-CLICKABLE-20261106 -->
 <!-- HUELLA-PERFIL-ZENODO-BADGE-DINAMICO-20261106 -->
 [![Zenodo](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fzenodo.org%2Fapi%2Frecords%3Fq%3Dcreators.orcid%3A0009-0001-9116-075X%26size%3D1&query=hits.total&label=Zenodo&suffix=%20deposits&logo=zenodo&logoColor=white&color=1682D4&style=flat-square)](https://zenodo.org/search?q=creators.orcid%3A0009-0001-9116-075X)
