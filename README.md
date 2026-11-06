@@ -13,7 +13,8 @@ metrology, shipped as instruments anyone can re-run — and as products people p
 ![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=flat-square&logo=githubactions&logoColor=white)
 ![pytest](https://img.shields.io/badge/pytest-0A9EDC?style=flat-square&logo=pytest&logoColor=white)
 <!-- HUELLA-PERFIL-ZENODO-BADGE-CLICKABLE-20261106 -->
-[![Zenodo](https://img.shields.io/badge/Zenodo_—_6_DOIs-1682D4?style=flat-square&logo=zenodo&logoColor=white)](https://zenodo.org/search?q=creators.orcid%3A0009-0001-9116-075X)
+<!-- HUELLA-PERFIL-ZENODO-BADGE-DINAMICO-20261106 -->
+[![Zenodo](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fzenodo.org%2Fapi%2Frecords%3Fq%3Dcreators.orcid%3A0009-0001-9116-075X%26size%3D1&query=hits.total&label=Zenodo&suffix=%20deposits&logo=zenodo&logoColor=white&color=1682D4&style=flat-square)](https://zenodo.org/search?q=creators.orcid%3A0009-0001-9116-075X)
 [![Studio City](https://img.shields.io/badge/Studio_City-live-111111?style=flat-square)](https://studiocity.app/)
 [![Barber Labs](https://img.shields.io/badge/Barber_Labs-live-111111?style=flat-square)](https://studiocity.app/barber-labs)
 [![Padel Labs](https://img.shields.io/badge/Padel_Labs-live-111111?style=flat-square)](https://studiocity.app/padel)
