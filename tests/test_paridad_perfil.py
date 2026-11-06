@@ -49,6 +49,7 @@ from __future__ import annotations
 
 import json
 import re
+import urllib.parse
 import subprocess
 import sys
 from pathlib import Path
@@ -517,6 +518,83 @@ def test_falsador_precio_sin_sujeto():
 
 
 # ------------------------------------------------- el instrumento, ejercitado
+# HUELLA-BADGE-MEDIDO-CON-LECTOR-20261106
+ENDPOINT_CORPUS = ("raw.githubusercontent.com/alexisromtz-lab/corpus-medido"
+                   "/main/badges/reglas.json")
+
+RE_BADGE = re.compile(
+    r"\[!\[(?P<alt>[^\]]*)\]\((?P<url>https://img\.shields\.io/[^)\s]*)\)\]\((?P<href>[^)\s]*)\)")
+RE_CIFRA_LITERAL = re.compile(r"(?:^|[-_])(\d+)[-_ ](?:rules?|reglas?)(?:[-_]|$)", re.I)
+
+
+def badges(t: str) -> list[dict[str, str]]:
+    return [m.groupdict() for m in RE_BADGE.finditer(t)]
+
+
+def auditar_badges(t: str) -> list[str]:
+    """Un badge que lleva su cifra escrita a mano es una cifra sin lector.
+
+    El defecto no es que el número sea falso —el `56_rules` era correcto el día
+    que se escribió—, es que nada lo habría puesto rojo el día que dejara de
+    serlo. Un badge dinámico publica un `url=`: ese endpoint ES el lector.
+    """
+    salida = []
+    for b in badges(t):
+        url = b["url"]
+        if "/badge/dynamic/" in url:
+            if not re.search(r"[?&]url=[^&]+", url):
+                salida.append(f"BADGE_DINAMICO_SIN_ENDPOINT: {b['alt']}")
+            continue
+        mensaje = urllib.parse.unquote(url.split("img.shields.io/badge/", 1)[-1].split("?")[0])
+        if RE_CIFRA_LITERAL.search(mensaje):
+            salida.append(f"BADGE_CIFRA_SIN_LECTOR: {b['alt']} · {mensaje[:70]}")
+    return salida
+
+
+def test_el_badge_del_corpus_lleva_lector_y_no_cifra():
+    marca = [b for b in badges(texto()) if b["alt"] == "corpus-medido"]
+    assert len(marca) == 1, "el perfil publica exactamente un badge de corpus-medido"
+    endpoint = urllib.parse.unquote(marca[0]["url"])
+    assert "dynamic/json" in marca[0]["url"], "el badge debe consultar el medidor, no llevar la cifra"
+    assert ENDPOINT_CORPUS in endpoint, f"el endpoint no apunta al medidor: {endpoint}"
+    assert "query=$.message" in endpoint, f"el badge no lee el campo medido: {endpoint}"
+    assert not RE_CIFRA_LITERAL.search(endpoint), "el badge volvió a escribir la cifra a mano"
+
+
+def test_ningun_badge_publica_una_cifra_sin_lector():
+    assert auditar_badges(texto()) == []
+
+
+def _mutar_badge(nuevo: str) -> str:
+    """Sustituye el badge del corpus por otro: el falsador muta el objeto real."""
+    original = texto()
+    actual = [b for b in badges(original) if b["alt"] == "corpus-medido"][0]
+    linea = f"[![corpus-medido]({actual['url']})]({actual['href']})"
+    assert original.count(linea) == 1
+    return original.replace(linea, nuevo)
+
+
+def test_falsador_badge_con_cifra_a_mano():
+    mutado = _mutar_badge(
+        "[![corpus-medido](https://img.shields.io/badge/corpus--medido-56_rules-111111?style=flat-square)]"
+        "(https://github.com/alexisromtz-lab/corpus-medido)")
+    hallazgos = auditar_badges(mutado)
+    assert len(hallazgos) == 1, hallazgos
+    assert hallazgos[0].startswith("BADGE_CIFRA_SIN_LECTOR: corpus-medido · "), hallazgos
+    assert "56_rules" in hallazgos[0], hallazgos
+
+
+def test_falsador_badge_dinamico_sin_endpoint():
+    mutado = _mutar_badge(
+        "[![corpus-medido](https://img.shields.io/badge/dynamic/json?query=%24.message&label=corpus--medido)]"
+        "(https://github.com/alexisromtz-lab/corpus-medido)")
+    assert auditar_badges(mutado) == ["BADGE_DINAMICO_SIN_ENDPOINT: corpus-medido"]
+
+
+def violaciones_badges(t: str) -> list[str]:
+    return auditar_badges(t)
+
+
 def test_los_instrumentos_se_autovalidan():
     """Un instrumento que no pasa su propio banco no mide nada: se ejerce, no se confía."""
     for nombre in ("medir_precio.py", "medir_censo.py"):
